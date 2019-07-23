@@ -1,0 +1,12 @@
+img {
+    width:100%;
+}
+
+.container {
+    font-family: 'PT Sans Narrow', sans-serif;
+    text-align: center;
+}
+
+#done {
+    float: right;
+}
