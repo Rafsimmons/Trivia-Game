@@ -1,55 +1,178 @@
-$(document).ready(function() {
-// setting questions, options, answers in a variable
-var quizQuestions = [
-    {question: "How many times did Ross get married?",
-    option: ["One", "Two", "Three", "four"],
-    answer: "Three"},
-    {question: "Which friend member peed on Monica's leg after a jellyfish stung her?",
-    option: ["Ross", "Joey", "Chandler", "Gunter"],
-    answer: "Joey"},
-    {question: "Who kissed Chandler's mom?",
-    option: ["Joey", "Chandler", "Ross", "Paolo"],
-    answer: "Ross"},
-    {question: "Which coffee shop did all the members hang out at?",
-    option: ["Central Park", "Dunkin Donuts", "Central Perk", "Starbucks"],
-    answer: "Central Perk"},
-    {question: "Was Phoebe married before Mike?",
-    option: ["Yes", "No"],
-    answer: "Yes"},
-    {question: "How many babies did Phoebe have?",
-    option: ["One", "Two", "Three", "Four"],
-    answer: "Three"},
-    {question: "What was Bary's (Rachel's ex fiance) occupation?",
-    option: ["Doctor", "Nurse", "Orthodontist", "Opthalmologist"],
-    answer: "Orthondonist"},
-    {question: "Where did Chandler and Monica move to?",
-    option: ["Hamptons", "Queens", "Long Island", "Westchester"],
-    answer: "Westchester"},
-    ]
+//$(document).ready(function){}
+function startGame(btn) {
+  btn.style.display = "none";
+  counter = 10;
+  currentQuestion = 0;
+  correctAnswers = 0;
+  incorrectAnswers = 0;
+  score = 0;
+  loadQuestion();
+  document.getElementById("container").style.display = "block";
+}
 
-// setting global variables
-var currentQuestion= 0;
-var correct= 0;
-var wrong=0;
-var clock= 45;
-var timer;
+const gameQuestions = [
+  {
+    question: "Who did Monica marry?",
+    choices: ["Joey", "Ross", "Richard", "Chandler"],
+    correctAnswer: "Chandler"
+  },
+  {
+    question: "Where did Ross and Emily get married?",
+    choices: ["America", "Paris", "London", "Europe"],
+    correctAnswer: "London"
+  },
+  {
+    question: "What was Ross's first born name?",
+    choices: ["Zack", "Cody", "Ben", "Frank"],
+    correctAnswer: "Ben"
+  },
+  {
+    question: "Was the Central Perk coffee shop always a coffee shop?",
+    choices: ["True", "False"],
+    correctAnswer: "False"
+  }
+];
 
+//variables
+let counter;
+let currentQuestion;
+let correctAnswers;
+let incorrectAnswers;
+let timer;
+let score;
+
+function nextQuestion() {
+  const isQuestionOver = gameQuestions.length - 1 === currentQuestion;
+  if (isQuestionOver) {
+    // TODO
+    console.log("Game is over!!!!!");
+    displayResult();
+  } else {
+    currentQuestion++;
+    loadQuestion();
+  }
+}
+
+function timeUp() {
+  clearInterval(timer);
+
+  incorrectAnswers++;
+  document.getElementById("feedback").innerHTML = "Incorrect Answer!";
+  document.getElementById("correctAns").innerHTML =
+    gameQuestions[currentQuestion].correctAnswer;
+  document.getElementById("feedback-box").style.display = "block";
+  hideElement("dGame");
+  setTimeout(function() {
+    hideElement("feedback-box");
+    // setTimeout(nextQuestion, 2 * 1000);
+    nextQuestion();
+    showElement("dGame");
+  }, 3000);
+}
+
+//timer
+function countDown() {
+  counter--;
+
+  $("#time").html("Timer: " + counter);
+  console.log(counter);
+  if (counter <= 0) {
+    console.log("counter === 0");
+    timeUp();
+  }
+}
+
+//display question and answer
 function loadQuestion() {
-    var questions = quizQuestions[currentQuestion].question;
-    var options= quizQuestions[currentQuestion].options;
-    $("#timeRemaining").html("Time Remaining: " + clock);
-    $("#game").html('<h3>' + question + '</h3>');
-    
-}
-function loadOptions(option) {
-    var results = '';
-
-    for (let i = 0; i < option.length; i++) {
-        results+= '<p class="option" data-answer="${option[i]}">${option[i]}</p>';
-        }
-        return results;
+  counter = 10;
+  timer = setInterval(countDown, 1000);
+  const question = gameQuestions[currentQuestion].question;
+  const choices = gameQuestions[currentQuestion].choices;
+  $("#time").html("Timer: " + counter);
+  $("#dGame").html(`<h4>${question}</h4>
+      ${loadChoices(choices)}
+      ${loadRemainingQuestion()}
+      `);
 }
 
+function hideElement(id) {
+  document.getElementById(id).style.display = "none";
+}
 
-loadQuestion()
-}); 
+function showElement(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function loadChoices(choices) {
+  var result = "";
+  for (var i = 0; i < choices.length; i++) {
+    result += `<p class="choice" data-answer="${choices[i]}">${choices[i]}</p>`;
+  }
+  return result;
+}
+
+$(document).on("click", ".choice", function() {
+  clearInterval(timer);
+  const selectedAnswer = $(this).attr("data-answer");
+  const correctAnswer = gameQuestions[currentQuestion].correctAnswer;
+
+  if (correctAnswer === selectedAnswer) {
+    console.log(gameQuestions[currentQuestion].correctAnswer);
+    document.getElementById("feedback").innerHTML = "You are Correct!!";
+    document.getElementById("correctAns-wrap").style.display = "none";
+    document.getElementById("feedback-box").style.display = "block";
+    console.log("you are correct");
+    hideElement("dGame");
+    setTimeout(function() {
+      hideElement("feedback-box");
+      // setTimeout(nextQuestion, 2 * 1000);
+      nextQuestion();
+      showElement("dGame");
+    }, 3000);
+
+    score++;
+    console.log("Winsss!!!!");
+  } else {
+    incorrectAnswers++;
+    // console.log('Lost!!!!');
+    // setTimeout(nextQuestion, 2 * 1000);
+
+    document.getElementById("feedback").innerHTML = "Incorrect Answer!";
+    console.log("you are incorrect");
+    document.getElementById("correctAns-wrap").style.display = "block";
+    document.getElementById("correctAns").innerHTML =
+      gameQuestions[currentQuestion].correctAnswer;
+    document.getElementById("feedback-box").style.display = "block";
+    hideElement("dGame");
+    setTimeout(function() {
+      hideElement("feedback-box");
+      // setTimeout(nextQuestion, 2 * 1000);
+      nextQuestion();
+      showElement("dGame");
+    }, 3000);
+  }
+});
+
+function displayResult() {
+  const result = `
+        <p>You get ${score} question(s) right</p>
+        <p>You missed ${incorrectAnswers} question(s)</p>
+        <p>Total questions ${gameQuestions.length} </p>
+        <button class="btn btn-primary" id="reset" onclick="startGame(this)">Reset Game</button>
+    `;
+
+  $("#dGame").html(result);
+}
+
+function loadRemainingQuestion() {
+  const remainingQuestion = gameQuestions.length - (currentQuestion + 1);
+  const totalQuestion = gameQuestions.length;
+
+  return `Remaining Question: ${remainingQuestion}/${totalQuestion}`;
+}
+
+function randomImage(images) {
+  const random = Math.floor(Math.random() * images.length);
+  const randomImage = images[random];
+  return randomImage;
+}

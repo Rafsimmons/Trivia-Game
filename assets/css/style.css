@@ -1,12 +1,50 @@
-img {
-    width:100%;
+#main-content {
+  background-color: black;
+  max-width: 960px;
+  margin-left: 300px;
+  color: white;
+  text-align: center;
+}
+body {
+  background-image: url(https://carlisletheacarlisletheatre.org/images/friends-logo-tv-show-1.jpg);
 }
 
-.container {
-    font-family: 'PT Sans Narrow', sans-serif;
-    text-align: center;
+header {
+  color: white;
+  font-weight: bold;
+  font-size: 40px;
+}
+.choice {
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 300px;
+  background-color: blue;
+  color: white;
+}
+#dGame {
+  background-color: grey;
+  margin: 0 auto;
+  margin-right: 600px;
+  filter: opacity(80%);
+}
+#time {
+  background-color: grey;
+  padding: 2px;
+  margin-right: 600px;
+  filter: opacity(80%);
 }
 
-#done {
-    float: right;
+#container {
+  justify-content: center;
+}
+#feedback-box {
+  width: 382px;
+  background-color: blue;
+  border: 3px solid white;
+  color: white;
+  text-align: center;
+  padding: 40px 0;
+  display: none;
 }
